@@ -12,6 +12,8 @@ import { api } from "@services/api";
 import axios from 'axios'
 import { Alert } from "react-native";
 import { AppError } from "@utils/App-error";
+import { useState } from "react";
+import { useAuth } from "@contexts/AuthContext";
 
 interface FormDataProps {
   name: string
@@ -31,6 +33,8 @@ const schema = yup.object({
 export function SignUp() {
 
   const toast = useToast()
+  const [isLoading, setIsLoading] = useState(false)
+  const { signIn } = useAuth()
 
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     resolver: yupResolver(schema)
@@ -43,12 +47,16 @@ export function SignUp() {
 
   async function handleSignUp({ email, name, password, password_confirm }: FormDataProps) {
     try {
-      const response = await api.post('/users', { email, name, password })
-      console.log(response.data)
+      setIsLoading(true)
+
+      await api.post('/users', { email, name, password })
+      await signIn(email, password)
 
     } catch (error) {
-      const isAppError = error instanceof AppError
 
+      setIsLoading(false)
+
+      const isAppError = error instanceof AppError
       const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde.'
       toast.show({
         title,
@@ -146,6 +154,7 @@ export function SignUp() {
           <Button
             title="Criar e acessar"
             onPress={handleSubmit(handleSignUp)}
+            isLoading={isLoading}
           />
         </Center>
 

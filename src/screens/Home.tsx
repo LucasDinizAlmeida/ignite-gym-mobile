@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Center, HStack, Text, VStack, FlatList, Heading } from "native-base";
+import { HStack, Text, VStack, FlatList, Heading } from "native-base";
 import { ExerciseCard } from "@components/ExerciseCard";
 import { Group } from "@components/Group";
 import { HomeHeader } from "@components/HomeHeader";
@@ -19,6 +19,7 @@ export function Home() {
   }
 
   return (
+
     <VStack flex={1}>
       <HomeHeader />
 
