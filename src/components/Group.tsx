@@ -24,7 +24,7 @@ export function Group({ name, isActive, ...rest }: Props) {
       }}
       {...rest}
     >
-      <Text color={isActive ? 'green.500' : 'gray.100'}>
+      <Text color={isActive ? 'green.500' : 'gray.100'} textTransform='uppercase'>
         {name}
       </Text>
     </Pressable>
