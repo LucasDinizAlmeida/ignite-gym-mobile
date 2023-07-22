@@ -10,12 +10,16 @@ import { MaterialIcons } from '@expo/vector-icons'
 // import ProfileSvg from '@assets/profile.svg'
 import { Icon, useTheme } from "native-base"
 import { Platform } from "react-native"
+import { useAuth } from "@contexts/AuthContext"
+import { tagUserInfoCreate } from "../notifications/notificationsTags"
+import { NotFound } from "@screens/NotFound"
 
 type AppRoutes = {
   home: undefined
   exercise: { exerciseId: string }
   profile: undefined
   history: undefined
+  notFound: undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>
@@ -24,6 +28,13 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>()
 
 export function AppRoutes() {
   const { sizes, colors } = useTheme()
+  const { user } = useAuth()
+
+  tagUserInfoCreate({
+    name: user.name,
+    email: user.email
+  })
+
 
   return (
     <Navigator screenOptions={{
@@ -84,6 +95,13 @@ export function AppRoutes() {
       <Screen
         name="exercise"
         component={Exercise}
+        options={{
+          tabBarButton: () => null
+        }}
+      />
+      <Screen
+        name="notFound"
+        component={NotFound}
         options={{
           tabBarButton: () => null
         }}
