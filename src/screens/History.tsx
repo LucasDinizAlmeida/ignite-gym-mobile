@@ -19,7 +19,7 @@ export function History() {
     try {
       setIsLoading(true)
 
-      const response = await api.get('/history')
+      const response = await api.get<HistoryByDayDTO[]>('/history')
       setExercises(response.data)
 
     } catch (error) {

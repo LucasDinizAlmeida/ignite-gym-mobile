@@ -14,6 +14,8 @@ import { api } from "@services/api";
 import { useEffect, useState } from "react";
 import { AppError } from "@utils/App-error";
 import { Loading } from "@components/Loading";
+import { tagAmountOfExercisesUpdate, tagLastExerciseUpdate } from "../notifications/notificationsTags";
+import { HistoryByDayDTO } from "@dtos/HistoryByDayDTO";
 
 const exerciseImage = 'https://conteudo.imguol.com.br/c/entretenimento/0c/2019/12/03/remada-unilateral-com-halteres-1575402100538_v2_600x600.jpg'
 
@@ -65,7 +67,16 @@ export function Exercise() {
         placement: 'top',
         bgColor: 'green.700'
       })
+      
+      const response = await api.get<HistoryByDayDTO[]>('/history')
+      tagAmountOfExercisesUpdate(response.data[0].data.length.toString())
 
+      tagLastExerciseUpdate(exerciseId.toString())
+
+      console.log({
+        exercises_count: response.data[0].data.length,
+        last_completed_exercise: exerciseId
+      })
       navigation.navigate('history')
 
     } catch (error) {
